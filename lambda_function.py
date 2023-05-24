@@ -14,7 +14,7 @@ def lambda_handler(event, context):
         InstanceType = "t2.micro",
         MaxCount = 1,
         MinCount = 1,
-        IamInstanceProfile = {"Arn": "arn:aws:iam::417338593075:instance-profile/EC2InstanceProfileRole"},
+        IamInstanceProfile = {"Arn": "arn:aws:iam::111122223333:instance-profile/EC2InstanceProfileRole"},
         NetworkInterfaces = [{
             "AssociatePublicIpAddress": True,
             "DeviceIndex": 0,
