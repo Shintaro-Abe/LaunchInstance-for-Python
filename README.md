@@ -8,8 +8,8 @@ response = client.get_caller_identity()
 * __レスポンス__
 ```
 {
-		'UserId': 'string',
-		'Account': 'string',
-		'Arn': 'string'
+	'UserId': 'string',
+	'Account': 'string',
+	'Arn': 'string'
 }
 ```
