@@ -1,8 +1,11 @@
 import boto3
 client= boto3.client('ec2')
+stsclient = boto3.client('sts')
 
 
 def lambda_handler(event, context):
+    identity = stsclient.get_caller_identity()
+    account_id = identity["Account"]
     TAG_VALUE = "ansible-server"
     USERDATA = "ansible_userdata.txt"
     with open(USERDATA, 'r') as file:
@@ -14,7 +17,7 @@ def lambda_handler(event, context):
         InstanceType = "t2.micro",
         MaxCount = 1,
         MinCount = 1,
-        IamInstanceProfile = {"Arn": "arn:aws:iam::111122223333:instance-profile/EC2InstanceProfileRole"},
+        IamInstanceProfile = {"Arn": "arn:aws:iam::" + account_id + ":instance-profile/ansible-server"},
         NetworkInterfaces = [{
             "AssociatePublicIpAddress": True,
             "DeviceIndex": 0,
@@ -33,6 +36,3 @@ def lambda_handler(event, context):
             },
         ],
         UserData = userdata_context)
-    print(response)
-    
-
