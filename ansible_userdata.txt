@@ -1,5 +1,5 @@
 #!/bin/bash
-
+ANSIBLE_PASS=$(aws ssm get-parameter --name "ansible_pass" --with-decryption --region ap-northeast-1  --output text --query Parameter.Value)
 Region=ap-northeast-1
 Output=table
 
@@ -35,6 +35,20 @@ send \"\n\"
 expect \"$\"
 exit 0
 "
+
+cd /home/ec2-user/.ssh
+for i in id_rsa id_rsa.pub
+do 
+    expect -c "
+    spawn sudo -u ec2-user ansible-vault encrypt $i 
+    expect \"New Vault password:\"
+    send \"$ANSIBLE_PASS\n\"
+    expect \"Confirm New Vault password:\"
+    send \"$ANSIBLE_PASS\n\"
+    expect \"$\"
+    exit 0
+    "
+done
 
 sed -i '12i interpreter_python = /usr/bin/python' /etc/ansible/ansible.cfg 
 sed -i '13i host_key_checking = False' /etc/ansible/ansible.cfg 
